@@ -124,4 +124,19 @@ const updateUser = async (req, res) => {
     res.status(200).json({user, token})
 }
 
-module.exports = {createUser,logUser , getUsers, getOneUser, deleteUser, updateUser}
+const resetPassword = async (req, res) => {
+    const {phone} = req.params
+    console.log(phone)
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(req.body.password, salt);
+
+    const user = await Users.findOneAndUpdate({phone: phone}, {password: hash})
+
+    if(!user){
+        return res.status(404).json({error: "المستخدم غير موجود"})
+    }
+    const token = createToken(user._id)
+    res.status(200).json({user, token})
+}
+
+module.exports = {createUser,logUser , getUsers, getOneUser, deleteUser, updateUser,resetPassword}
