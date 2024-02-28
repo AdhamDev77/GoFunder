@@ -24,7 +24,7 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use(express.static('uploads'));
+app.use('/uploads', express.static('uploads'));
 app.use('/api/users', usersRoutes)
 app.use('/api/campaigns', campaignsRoutes)
 app.use('/api/donation', donationsRoutes)
